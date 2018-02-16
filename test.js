@@ -28,7 +28,7 @@ describe('findAccountsForHostname(...)', () => {
     ]
 
     const expected = [
-      { hostname: 'facebook.com', score: 0.75 }
+      { hostname: 'facebook.com', score: 0.8 }
     ]
 
     const actual = findAccountsForHostname('sso.facebook.com', accounts)
@@ -44,10 +44,41 @@ describe('findAccountsForHostname(...)', () => {
     ]
 
     const expected = [
-      { hostname: 'sso.facebook.com', score: 0.75 }
+      { hostname: 'sso.facebook.com', score: 0.8 }
     ]
 
     const actual = findAccountsForHostname('login.facebook.com', accounts)
+
+    assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should find an account with a different subdomain (1)', () => {
+    const accounts = [
+      { hostname: 'hotels.airbnb.com' },
+      { hostname: 'travel.facebook.com' }
+    ]
+
+    const expected = [
+      { hostname: 'hotels.airbnb.com', score: 0.6 }
+    ]
+
+    const actual = findAccountsForHostname('travel.airbnb.com', accounts)
+
+    assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should find an account with a different subdomain (2)', () => {
+    const accounts = [
+      { hostname: 'hotels.airbnb.com' },
+      { hostname: 'cars.airbnb.com' }
+    ]
+
+    const expected = [
+      { hostname: 'hotels.airbnb.com', score: 0.6 },
+      { hostname: 'cars.airbnb.com', score: 0.6 }
+    ]
+
+    const actual = findAccountsForHostname('travel.airbnb.com', accounts)
 
     assert.deepStrictEqual(actual, expected)
   })
@@ -60,8 +91,8 @@ describe('findAccountsForHostname(...)', () => {
     ]
 
     const expected = [
-      { hostname: 'airbnb.co.uk', score: 0.5 },
-      { hostname: 'airbnb.se', score: 0.5 }
+      { hostname: 'airbnb.co.uk', score: 0.4 },
+      { hostname: 'airbnb.se', score: 0.4 }
     ]
 
     const actual = findAccountsForHostname('airbnb.com', accounts)
@@ -78,8 +109,8 @@ describe('findAccountsForHostname(...)', () => {
     ]
 
     const expected = [
-      { hostname: 'hotels.airbnb.se', score: 0.5 },
-      { hostname: 'airbnb.co.uk', score: 0.25 }
+      { hostname: 'hotels.airbnb.se', score: 0.4 },
+      { hostname: 'airbnb.co.uk', score: 0.2 }
     ]
 
     const actual = findAccountsForHostname('hotels.airbnb.com', accounts)
@@ -97,14 +128,16 @@ describe('findAccountsForHostname(...)', () => {
       { hostname: 'hotels.airbnb.com' },
       { hostname: 'hotels.airbnb.se' },
       { hostname: 'login.github.com' },
-      { hostname: 'sso.facebook.com' }
+      { hostname: 'sso.facebook.com' },
+      { hostname: 'travels.airbnb.com' }
     ]
 
     const expected = [
       { hostname: 'auth.hotels.airbnb.com', score: 1 },
-      { hostname: 'hotels.airbnb.com', score: 0.75 },
-      { hostname: 'hotels.airbnb.se', score: 0.5 },
-      { hostname: 'airbnb.co.uk', score: 0.25 }
+      { hostname: 'hotels.airbnb.com', score: 0.8 },
+      { hostname: 'travels.airbnb.com', score: 0.6 },
+      { hostname: 'hotels.airbnb.se', score: 0.4 },
+      { hostname: 'airbnb.co.uk', score: 0.2 }
     ]
 
     const actual = findAccountsForHostname('auth.hotels.airbnb.com', accounts)
