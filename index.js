@@ -1,14 +1,21 @@
 const parseHostname = require('parse-hostname')
 const stripCommonPrefixes = require('@ctrlpanel/strip-common-prefixes')
 
+function stripPath (input) {
+  const idx = input.indexOf('/')
+  return (idx === -1 ? input : input.slice(0, idx))
+}
+
 function scoreAccountFactory (hostname) {
-  const hostnameWithoutPrefix = stripCommonPrefixes(hostname)
+  const hostnameWithoutPath = stripPath(hostname)
+  const hostnameWithoutPrefix = stripCommonPrefixes(hostnameWithoutPath)
   const hostnameParts = parseHostname(hostnameWithoutPrefix)
 
   function scoreAccount (acc) {
-    if (acc.hostname === hostname) return 1
+    const withoutPath = stripPath(acc.hostname)
+    if (withoutPath === hostnameWithoutPath) return 1
 
-    const withoutPrefix = stripCommonPrefixes(acc.hostname)
+    const withoutPrefix = stripCommonPrefixes(withoutPath)
     if (withoutPrefix === hostnameWithoutPrefix) return 0.8
 
     const parts = parseHostname(withoutPrefix)
