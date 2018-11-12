@@ -145,15 +145,17 @@ describe('findAccountsForHostname(...)', () => {
     assert.deepStrictEqual(actual, expected)
   })
 
-  it('should handle included paths', () => {
+  it('should handle included port/paths', () => {
     const accounts = [
       { hostname: 'mail.google.com' },
-      { hostname: 'google.com/mail' }
+      { hostname: 'google.com/mail' },
+      { hostname: 'foo.google.com:8000' }
     ]
 
     const expected = [
       { hostname: 'google.com/mail', score: 1 },
-      { hostname: 'mail.google.com', score: 0.6 }
+      { hostname: 'mail.google.com', score: 0.6 },
+      { hostname: 'foo.google.com:8000', score: 0.6 }
     ]
 
     const actual = findAccountsForHostname('google.com/login', accounts)
