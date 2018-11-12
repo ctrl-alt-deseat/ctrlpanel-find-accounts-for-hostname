@@ -162,4 +162,35 @@ describe('findAccountsForHostname(...)', () => {
 
     assert.deepStrictEqual(actual, expected)
   })
+
+  it('should gracefully handle bad data', () => {
+    const accounts = [
+      { hostname: 'facebook.com' },
+      { hostname: 'localhost:8000' }
+    ]
+
+    const expected = [
+      { hostname: 'facebook.com', score: 1 }
+    ]
+
+    const actual = findAccountsForHostname('facebook.com', accounts)
+
+    assert.deepStrictEqual(actual, expected)
+  })
+
+  it('should match on bad data', () => {
+    const accounts = [
+      { hostname: 'xmdLKZjUd' },
+      { hostname: 'hONe8J4C7' },
+      { hostname: 'aXIYPX6Oa' }
+    ]
+
+    const expected = [
+      { hostname: 'hONe8J4C7', score: 1 }
+    ]
+
+    const actual = findAccountsForHostname('hONe8J4C7', accounts)
+
+    assert.deepStrictEqual(actual, expected)
+  })
 })

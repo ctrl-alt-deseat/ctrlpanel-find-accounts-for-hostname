@@ -23,10 +23,15 @@ function scoreAccountFactory (hostname) {
     const withoutPrefix = stripCommonPrefixes(withoutPortAndPath)
     if (withoutPrefix === hostnameWithoutPrefix) return 0.8
 
-    const parts = parseHostname(withoutPrefix)
-    if (parts[1] === hostnameParts[1] && parts[2] === hostnameParts[2]) return 0.6
-    if (parts[0] === hostnameParts[0] && parts[1] === hostnameParts[1]) return 0.4
-    if (parts[1] === hostnameParts[1]) return 0.2
+    if (hostnameParts) {
+      const parts = parseHostname(withoutPrefix)
+
+      if (parts) {
+        if (parts[1] === hostnameParts[1] && parts[2] === hostnameParts[2]) return 0.6
+        if (parts[0] === hostnameParts[0] && parts[1] === hostnameParts[1]) return 0.4
+        if (parts[1] === hostnameParts[1]) return 0.2
+      }
+    }
 
     return 0
   }
